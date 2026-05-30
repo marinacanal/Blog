@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace BlogApi.Entities;
 
 public class Post
@@ -9,7 +11,9 @@ public class Post
     public DateTime CreatedAt { get; set; }
     public DateTime PublishedAt { get; set; }
     public bool IsOccult { get; set; }
+    
     public int AuthorId { get; set; }
     public User? Author { get; set; }
-    public List<Comment>? Comments { get; set; }
+    public ICollection<Tag> Tags { get; set; } = [];
+    public ICollection<Comment> Comments { get; set; } = [];
 }

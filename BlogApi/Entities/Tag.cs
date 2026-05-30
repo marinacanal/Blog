@@ -6,4 +6,6 @@ public class Tag
     public string? Name { get; set; }
     public string? Color { get; set; }
     public string? Slug { get; set; }
+
+    public ICollection<Post> Posts { get; set; } = [];
 }

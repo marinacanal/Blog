@@ -8,6 +8,9 @@ public class User
     public string? PasswordHash { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool IsActive { get; set; }
+    
     public int RoleId { get; set; }
     public Role? Role { get; set; }
+    public ICollection<Post> Posts { get; set; } = [];
+    public ICollection<Comment> Comments { get; set; } = [];
 }
