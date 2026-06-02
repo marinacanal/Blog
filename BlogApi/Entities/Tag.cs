@@ -1,11 +1,18 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BlogApi.Entities;
 
 public class Tag
 {
     public int Id { get; set; }
-    public string? Name { get; set; }
-    public string? Color { get; set; }
-    public string? Slug { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    public string Name { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(20)]
+    public string Color { get; set; } = string.Empty;
 
     public ICollection<Post> Posts { get; set; } = [];
 }
