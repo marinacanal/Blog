@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlogApi.Controllers
+namespace BlogApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class PostController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class PostController : ControllerBase
-    {
-        
-    }
+
 }

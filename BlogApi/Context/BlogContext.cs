@@ -3,7 +3,7 @@ using BlogApi.Entities;
 
 namespace BlogApi.Context;
 
-public class BlogContext : DbContext 
+public class BlogContext : DbContext
 {
     public BlogContext(DbContextOptions<BlogContext> options) : base(options)
     {

@@ -9,10 +9,10 @@ public class Comment
     [Required]
     [StringLength(1000)]
     public string? Content { get; set; }
-    
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsOccult { get; set; }
-    
+
     public int AuthorId { get; set; }
     public User? Author { get; set; }
     public int PostId { get; set; }

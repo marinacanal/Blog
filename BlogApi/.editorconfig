@@ -1,0 +1,7 @@
+root = true
+
+[*.cs]
+
+# Namespace declarations should be file scoped.
+# Ex: namespace Convention;
+csharp_style_namespace_declarations = file_scoped:warning
