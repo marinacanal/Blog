@@ -8,7 +8,7 @@ namespace BlogApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RoleController : ControllerBase
+public class PostsController : ControllerBase
 {
 
 }
