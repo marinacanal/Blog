@@ -1,46 +1,45 @@
 using BlogApi.Context;
 using BlogApi.Repositories.Interfaces;
 
-namespace BlogApi.Repositories
+namespace BlogApi.Repositories;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly BlogContext _context;
+    public IUserRepository Users { get; }
+    public IPostRepository Posts { get; }
+    public ICommentRepository Comments { get; }
+    public ITagRepository Tags { get; }
+    public IRoleRepository Roles { get; }
+    public IPermissionRepository Permissions { get; }
+
+    public UnitOfWork(BlogContext context, IUserRepository users, IPostRepository posts, ICommentRepository comments, ITagRepository tags, IRoleRepository roles, IPermissionRepository permissions)
     {
-        private readonly BlogContext _context;
-        public IUserRepository Users { get; }
-        public IPostRepository Posts { get; }
-        public ICommentRepository Comments { get; }
-        public ITagRepository Tags { get; }
-        public IRoleRepository Roles { get; }
-        public IPermissionRepository Permissions { get; }
+        _context = context;
+        Users = users;
+        Posts = posts;
+        Comments = comments;
+        Tags = tags;
+        Roles = roles;
+        Permissions = permissions;
+    }
 
-        public UnitOfWork(BlogContext context, IUserRepository users, IPostRepository posts, ICommentRepository comments, ITagRepository tags, IRoleRepository roles, IPermissionRepository permissions)
-        {
-            _context = context;
-            Users = users;
-            Posts = posts;
-            Comments = comments;
-            Tags = tags;
-            Roles = roles;
-            Permissions = permissions;
-        }
+    public async Task<int> CommitAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
 
-        public async Task<int> CommitAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        public void Dispose()
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
+            _context.Dispose();
         }
     }
 }

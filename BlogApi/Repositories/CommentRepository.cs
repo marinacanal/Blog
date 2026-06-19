@@ -2,22 +2,24 @@ using BlogApi.Context;
 using BlogApi.Entities;
 using BlogApi.Repositories.Interfaces;
 
-namespace BlogApi.Repositories
+namespace BlogApi.Repositories;
+
+public class CommentRepository : GenericRepository<Comment>, ICommentRepository
 {
-    public class CommentRepository : GenericRepository<Comment>, ICommentRepository
+    public CommentRepository(BlogContext context) : base(context)
     {
-        public CommentRepository(BlogContext context) : base(context)
-        {
-        }
+    }
 
-        public Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int id)
+    {
+        return await GetAllAsync(c => c.PostId == id);
+    }
 
-        public Task UpdateVisibilityAsync(int id, bool oculto)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task UpdateVisibilityAsync(int id, bool oculto)
+    {
+        var comment = await GetByIdAsync(id) ?? throw new KeyNotFoundException($"Comentário com o ID {id} não foi encontrado.");
+        comment.IsOccult = oculto;
+
+        Update(comment);
     }
 }

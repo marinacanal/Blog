@@ -11,6 +11,10 @@ public class Tag
     public string Name { get; set; } = string.Empty;
 
     [Required]
+    [StringLength(50)]
+    public string Slug { get; set; } = string.Empty;
+
+    [Required]
     [StringLength(20)]
     public string Color { get; set; } = string.Empty;
 
