@@ -5,5 +5,5 @@ namespace BlogApi.Repositories.Interfaces;
 public interface IPostRepository : IGenericRepository<Post>
 {
     Task<Post?> GetBySlugAsync(string slug);
-    Task<IEnumerable<Post>> GetByAuthorIdAsync(int authorId);
+    Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(int authorId);
 }

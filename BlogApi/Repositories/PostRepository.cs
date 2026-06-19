@@ -15,7 +15,7 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
         return await GetFirstOrDefaultAsync(p => p.Slug == slug);
     }
 
-    public async Task<IEnumerable<Post>> GetByAuthorIdAsync(int authorId)
+    public async Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(int authorId)
     {
         return await GetAllAsync(p => p.AuthorId == authorId);
     }
