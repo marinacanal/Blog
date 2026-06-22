@@ -1,8 +1,9 @@
 using System.Linq.Expressions;
+using BlogApi.Common;
 
 namespace BlogApi.Repositories.Interfaces;
 
-public interface IGenericRepository<T> where T : class
+public interface IGenericRepository<T> : IScopedDependency where T : class
 {
     Task<T?> GetByIdAsync(int id);
     Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>>? predicate);

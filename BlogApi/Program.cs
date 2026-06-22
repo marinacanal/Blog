@@ -1,11 +1,31 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using BlogApi.Context;
+using BlogApi.Common;
 using BlogApi.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(autofacBuilder =>
+{
+    var assembly = typeof(Program).Assembly;
+
+    autofacBuilder.RegisterAssemblyOpenGenericTypes(assembly)
+        .Where(t => typeof(IScopedDependency).IsAssignableFrom(t) && !t.IsInterface && t.IsGenericType)
+        .As(type => type.GetInterfaces()
+            .Where(interf => interf.Name == $"I{type.Name}")
+            .Select(interf => interf.GetGenericTypeDefinition()))
+        .InstancePerLifetimeScope();
+
+    autofacBuilder.RegisterAssemblyTypes(assembly)
+        .Where(t => typeof(IScopedDependency).IsAssignableFrom(t) && !t.IsInterface && !t.IsGenericType)
+        .As(type => type.GetInterfaces()
+            .Where(interf => interf.Name == $"I{type.Name}"))
+        .InstancePerLifetimeScope();
+});
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<BlogContext>(options =>

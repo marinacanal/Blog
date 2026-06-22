@@ -1,6 +1,8 @@
+using BlogApi.Common;
+
 namespace BlogApi.Repositories.Interfaces;
 
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWork : IDisposable, IScopedDependency
 {
     IUserRepository Users { get; }
     IPostRepository Posts { get; }
