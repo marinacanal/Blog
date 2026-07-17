@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Blog.Domain.Entities;
 
 public class User : Entity
