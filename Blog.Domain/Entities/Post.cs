@@ -7,7 +7,7 @@ public class Post : Entity
     public string Slug { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime PublishedAt { get; set; }
-    public bool IsOccult { get; set; }
+    public bool IsHidden { get; set; }
 
     public int AuthorId { get; set; }
     public User? Author { get; set; }

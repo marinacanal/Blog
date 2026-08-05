@@ -4,7 +4,7 @@ public class Comment : Entity
 {
     public string? Content { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public bool IsOccult { get; set; }
+    public bool IsHidden { get; set; }
 
     public int AuthorId { get; set; }
     public User? Author { get; set; }

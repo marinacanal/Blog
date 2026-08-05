@@ -19,4 +19,12 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
     {
         return await GetAllAsync(p => p.AuthorId == authorId);
     }
+
+    public async Task UpdateVisibilityAsync(int id, bool hidden)
+    {
+        var post = await GetByIdAsync(id) ?? throw new KeyNotFoundException($"Post com o ID {id} não foi encontrado.");
+        post.IsHidden = hidden;
+
+        Update(post);
+    }
 }

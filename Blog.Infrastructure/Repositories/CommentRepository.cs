@@ -15,10 +15,10 @@ public class CommentRepository : GenericRepository<Comment>, ICommentRepository
         return await GetAllAsync(c => c.PostId == id);
     }
 
-    public async Task UpdateVisibilityAsync(int id, bool oculto)
+    public async Task UpdateVisibilityAsync(int id, bool hidden)
     {
         var comment = await GetByIdAsync(id) ?? throw new KeyNotFoundException($"Comentário com o ID {id} não foi encontrado.");
-        comment.IsOccult = oculto;
+        comment.IsHidden = hidden;
 
         Update(comment);
     }
