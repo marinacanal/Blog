@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Blog.Application.DTOs;
+using Blog.Application.DTOs.Comment;
 
-namespace Blog.Application.Interfaces.Services
+namespace Blog.Application.Interfaces.Services;
+
+public interface ICommentService
 {
-    public interface ICommentService
-    {
-        
-    }
+    Task<CommentResponseDto> CreateCommentAsync(CreateCommentRequestDto request);
+    Task<CommentResponseDto> UpdateCommentVisibilityAsync(int id, bool hidden);
+    Task<bool> DeleteCommentAsync(int id);
+    Task<PagedResult<CommentResponseDto>> GetCommentsByPostIdAsync(GetCommentsFilterDto filter);
 }

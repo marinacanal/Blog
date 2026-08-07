@@ -1,7 +1,7 @@
 namespace Blog.Application.DTOs.Post;
 
-public class UpdatePostRequestDto
-{
-    public string? Title { get; set; }
-    public string? Content { get; set; }
-}
+public sealed record UpdatePostRequestDto(
+    string? Title,
+    string? Content
+)
+{ }
