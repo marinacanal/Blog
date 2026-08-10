@@ -15,7 +15,7 @@ public class TagRepository : GenericRepository<Tag>, ITagRepository
         return await GetFirstOrDefaultAsync(t => t.Slug == slug);
     }
 
-    public async Task<IEnumerable<Tag>> GetTagsByPostAsync(int postId)
+    public async Task<IEnumerable<Tag>> GetTagsByPostAsync(Guid postId)
     {
         return await GetAllAsync(t => t.Posts.Any(p => p.Id == postId));
     }

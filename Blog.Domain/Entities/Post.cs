@@ -9,7 +9,7 @@ public class Post : Entity
     public DateTime PublishedAt { get; set; }
     public bool IsHidden { get; set; }
 
-    public int AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
     public User? Author { get; set; }
     public ICollection<Tag> Tags { get; set; } = [];
     public ICollection<Comment> Comments { get; set; } = [];

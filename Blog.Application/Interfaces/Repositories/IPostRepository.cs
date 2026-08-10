@@ -5,6 +5,6 @@ namespace Blog.Application.Interfaces;
 public interface IPostRepository : IGenericRepository<Post>
 {
     Task<Post?> GetBySlugAsync(string slug);
-    Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(int authorId);
-    Task UpdateVisibilityAsync(int id, bool hidden);
+    Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(Guid authorId);
+    Task UpdateVisibilityAsync(Guid id, bool hidden);
 }

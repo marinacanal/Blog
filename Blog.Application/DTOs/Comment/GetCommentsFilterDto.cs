@@ -1,8 +1,8 @@
 namespace Blog.Application.DTOs.Comment;
 
 public sealed record GetCommentsFilterDto(
-    int? AuthorId,
-    int? PostId,
+    Guid? AuthorId,
+    Guid? PostId,
     int Page,
     int PageSize
 )

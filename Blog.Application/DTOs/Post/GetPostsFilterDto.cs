@@ -1,8 +1,9 @@
 namespace Blog.Application.DTOs.Post;
 
 public sealed record GetPostsFilterDto(
-    int? AuthorId,
+    Guid? AuthorId,
     IReadOnlyCollection<string>? TagSlugs,
+    bool? IncludeHidden,
     int Page,
     int PageSize
 )

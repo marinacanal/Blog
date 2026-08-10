@@ -1,11 +1,11 @@
 namespace Blog.Application.DTOs.Comment;
 
 public sealed record CommentResponseDto(
-    int Id,
+    Guid Id,
     string Content,
     DateTime CreatedAt,
     bool IsHidden,
-    int AuthorId,
-    int PostId
+    Guid AuthorId,
+    Guid PostId
 )
 { }

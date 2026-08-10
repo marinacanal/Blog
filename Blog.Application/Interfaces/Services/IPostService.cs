@@ -10,6 +10,5 @@ public interface IPostService : IScopedDependency
     Task<PostResponseDto> UpdatePostVisibilityAsync(int id, bool hidden);
     Task<bool> DeletePostAsync(int id);
     Task<PagedResult<PostResponseDto>> GetPostsAsync(GetPostsFilterDto? filter = null);
-    Task<IEnumerable<PostResponseDto>> GetPostsByIdAsync(int postId);
-    Task<IEnumerable<PostResponseDto>> GetPostsByUserAsync(int userId, bool includeHidden = false);
+    Task<PostResponseDto> GetPostByIdAsync(int postId);
 }

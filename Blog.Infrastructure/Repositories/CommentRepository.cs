@@ -10,7 +10,7 @@ public class CommentRepository : GenericRepository<Comment>, ICommentRepository
     {
     }
 
-    public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int id)
+    public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(Guid id)
     {
         return await GetAllAsync(c => c.PostId == id);
     }

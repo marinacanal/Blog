@@ -8,5 +8,5 @@ public interface ICommentService
     Task<CommentResponseDto> CreateCommentAsync(CreateCommentRequestDto request);
     Task<CommentResponseDto> UpdateCommentVisibilityAsync(int id, bool hidden);
     Task<bool> DeleteCommentAsync(int id);
-    Task<PagedResult<CommentResponseDto>> GetCommentsByPostIdAsync(GetCommentsFilterDto filter);
+    Task<PagedResult<CommentResponseDto>> GetCommentsAsync(GetCommentsFilterDto filter);
 }

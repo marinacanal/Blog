@@ -4,6 +4,6 @@ namespace Blog.Application.Interfaces;
 
 public interface ICommentRepository : IGenericRepository<Comment>
 {
-    Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int id);
-    Task UpdateVisibilityAsync(int id, bool hidden);
+    Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(Guid id);
+    Task UpdateVisibilityAsync(Guid id, bool hidden);
 }

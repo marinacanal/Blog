@@ -1,14 +1,14 @@
 namespace Blog.Application.DTOs.Post;
 
 public sealed record PostResponseDto(
-    int Id,
+    Guid Id,
     string? Title,
     string? Content,
     string? Slug,
     DateTime CreatedAt,
     DateTime PublishedAt,
-    bool IsOccult,
-    int AuthorId,
+    bool IsHidden,
+    Guid AuthorId,
     ICollection<string> TagNames
 )
 { }
