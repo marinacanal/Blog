@@ -3,7 +3,7 @@ using Blog.Application.DTOs.Comment;
 
 namespace Blog.Application.Interfaces.Services;
 
-public interface ICommentService
+public interface ICommentService : IScopedDependency
 {
     Task<CommentResponseDto> CreateCommentAsync(CreateCommentRequestDto request);
     Task<CommentResponseDto> UpdateCommentVisibilityAsync(int id, bool hidden);

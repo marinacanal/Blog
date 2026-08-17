@@ -1,18 +1,17 @@
-using Blog.Domain.Constants;
 using Blog.Infrastructure.Context;
 using Blog.Infrastructure.Interfaces;
 
 namespace Blog.Infrastructure.Seeders;
 
-public class PermissionSeeder : ISeeder
+public class RoleSeeder : ISeeder
 {
     public async Task SeedAsync(BlogContext context)
     {
-        if (!context.Permissions.Any())
+        if (!context.Roles.Any())
         {
-            var permissions = PermissionValues.GetPermissions();
+            var roles = RolePermissions.GetRolesWithPermissions();
 
-            context.Permissions.AddRange(permissions);
+            context.Roles.AddRange(roles);
             await context.SaveChangesAsync();
         }
     }
