@@ -1,6 +1,9 @@
 using Blog.Infrastructure.Context;
 using Blog.Domain.Entities;
 using Blog.Application.Interfaces;
+using Blog.Application.DTOs;
+using Blog.Application.DTOs.Post;
+using System.Linq.Expressions;
 
 namespace Blog.Infrastructure.Repositories;
 
@@ -15,9 +18,14 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
         return await GetFirstOrDefaultAsync(p => p.Slug == slug);
     }
 
-    public async Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(Guid authorId)
+    public async Task<PagedResult<Post>> GetPostsAsync(GetPostsFilterDto filterDto)
     {
-        return await GetAllAsync(p => p.AuthorId == authorId);
+        Expression<Func<Post, bool>> predicate = p => 
+            (!filterDto.AuthorId.HasValue || p.AuthorId == filterDto.AuthorId.Value) &&
+            (filterDto.TagSlugs == null || !filterDto.TagSlugs.Any() || p.Tags.Any(t => filterDto.TagSlugs.Contains(t.Slug))) &&
+            (filterDto.IncludeHidden.HasValue || p.IsHidden == false) ;
+
+        return await GetPagedAsync(filterDto, predicate);
     }
 
     public async Task UpdateVisibilityAsync(Guid id, bool hidden)

@@ -2,6 +2,8 @@ using System.Linq.Expressions;
 using Blog.Infrastructure.Context;
 using Blog.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Blog.Application.DTOs;
+using Blog.Infrastructure.Extensions;
 
 namespace Blog.Infrastructure.Repositories;
 
@@ -43,6 +45,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         }
 
         return await query.ToListAsync();
+    }
+
+    public async Task<PagedResult<T>> GetPagedAsync(PaginationParams pagination, Expression<Func<T, bool>>? predicate = null)
+    {
+        IQueryable<T> query = _dbSet.AsNoTracking();
+
+        if (predicate != null)
+        {
+            query = query.Where(predicate);
+        }
+
+        return await query.ToPagedResultAsync(pagination.Page, pagination.PageSize);
     }
 
     public async Task AddAsync(T entity)
