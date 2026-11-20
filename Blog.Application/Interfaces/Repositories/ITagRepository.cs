@@ -7,6 +7,7 @@ namespace Blog.Application.Interfaces;
 public interface ITagRepository : IGenericRepository<Tag>
 {
     Task<Tag?> GetBySlugAsync(string slug);
+    Task<IEnumerable<Tag>> GetTagsByIdsAsync(IReadOnlyCollection<Guid> ids);
     Task<IEnumerable<Tag>> GetTagsByPostAsync(Guid postId); 
     Task<PagedResult<Tag>> GetTagsAsync(GetTagsFilterDto filterDto); 
 }

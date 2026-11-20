@@ -10,15 +10,14 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
-    {
-        return await GetFirstOrDefaultAsync(u => u.Email == email);
-    }
+    public async Task<User?> GetByEmailAsync(string email) 
+        => await GetFirstOrDefaultAsync(u => u.Email == email);
 
     public async Task<bool> UpdatePasswordHashAsync(Guid id, string newPasswordHash)
     {
         var user = await GetByIdAsync(id) ?? throw new KeyNotFoundException($"Usuário com o ID {id} não foi encontrado.");
         user.PasswordHash = newPasswordHash;
+
         Update(user);
         return true;
     }
@@ -27,6 +26,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
         var user = await GetByIdAsync(id) ?? throw new KeyNotFoundException($"Usuário com o ID {id} não foi encontrado.");
         user.IsActive = true;
+
         Update(user);
         return true;
     }
@@ -35,6 +35,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
         var user = await GetByIdAsync(id) ?? throw new KeyNotFoundException($"Usuário com o ID {id} não foi encontrado.");
         user.IsActive = false;
+        
         Update(user);
         return true;
     }

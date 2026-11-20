@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Diagnostics;
+using Blog.Application.DTOs;
+using FluentValidation;
 
 namespace Blog.Api.Exceptions;
 
@@ -18,27 +19,61 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
 
-        var problemDetails = new ProblemDetails
-        {
-            Status = StatusCodes.Status500InternalServerError,
-            Title = "Server Error",
-            Instance = httpContext.Request.Path
-        };
+        int statusCode;
+        string message;
+        List<string> errors;
 
-        if(_env.IsDevelopment())
+        switch (exception)
         {
-            problemDetails.Detail = exception.Message;
-            problemDetails.Extensions["stackTrace"] = exception.StackTrace;
+            case ValidationException validationException:
+                statusCode = StatusCodes.Status400BadRequest;
+                message = "Erro de validação.";
+                errors = validationException.Errors
+                    .Select(error => error.ErrorMessage)
+                    .Distinct()
+                    .ToList();
+                break;
+
+            case ArgumentException argumentException:
+                statusCode = StatusCodes.Status400BadRequest;
+                message = exception.Message;
+                errors = new List<string> { exception.Message };
+                break;
+
+            case KeyNotFoundException keyNotFoundException:
+                statusCode = StatusCodes.Status404NotFound;
+                message = exception.Message;
+                errors = new List<string> { exception.Message };
+                break;
+
+            default:
+                statusCode = StatusCodes.Status500InternalServerError;
+                message = "Ocorreu um erro interno no servidor do Blog.";
+                errors = new List<string> { "Ocorreu um erro inesperado." };
+                break;
         }
+
+        if (statusCode >= 500)
+            _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
         else
-        {
-            problemDetails.Detail = "Ocorreu um erro interno no servidor do Blog. Por favor, tente novamente mais tarde.";
-        }
+            _logger.LogWarning(exception, "Request failed: {Message}", exception.Message);
 
-        httpContext.Response.StatusCode = problemDetails.Status.Value;
+        if (_env.IsDevelopment())
+            errors.Add($"Exception: {exception.Message} StackTrace: {exception.StackTrace}");
 
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        httpContext.Response.StatusCode = statusCode;
 
+        var response = new ApiResponse<object>(
+            Success: false,
+            Message: message,
+            Errors: errors
+        );
+
+        await httpContext.Response.WriteAsJsonAsync(
+            response,
+            cancellationToken
+        );
+        
         return true;
     }
 }

@@ -2,7 +2,9 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Blog.Api.Exceptions;
 using Blog.Application.Interfaces;
+using Blog.Application.Validators.Post;
 using Blog.Infrastructure.Context;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,9 +31,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>(autofacBuilder =>
 builder.Services.AddControllers();
 builder.Services.AddDbContext<BlogContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddValidatorsFromAssemblyContaining<CreatePostRequestDtoValidator>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
-
 var app = builder.Build();
 
 app.UseExceptionHandler();

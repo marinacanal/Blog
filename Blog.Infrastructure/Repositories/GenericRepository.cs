@@ -19,17 +19,20 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     }
 
     public async Task<T?> GetByIdAsync(Guid id)
-    {
-        return await _dbSet.FindAsync(id);
-    }
+        => await _dbSet.FindAsync(id);
 
-    public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>>? predicate)
+    public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>>? predicate, Func<IQueryable<T>, IQueryable<T>>? include = null)
     {
         IQueryable<T> query = _dbSet;
 
         if (predicate != null)
         {
             query = query.Where(predicate);
+        }
+    
+        if (include != null)
+        {
+            query = include(query);
         }
 
         return await query.FirstOrDefaultAsync();
@@ -47,7 +50,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return await query.ToListAsync();
     }
 
-    public async Task<PagedResult<T>> GetPagedAsync(PaginationParams pagination, Expression<Func<T, bool>>? predicate = null)
+    public async Task<PagedResult<T>> GetPagedAsync(
+        PaginationParams pagination,
+        Expression<Func<T, bool>>? predicate = null,
+        Func<IQueryable<T>, IQueryable<T>>? include = null)
     {
         IQueryable<T> query = _dbSet.AsNoTracking();
 
@@ -56,21 +62,23 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             query = query.Where(predicate);
         }
 
-        return await query.ToPagedResultAsync(pagination.Page, pagination.PageSize);
+        if (include != null)
+        {
+            query = include(query);
+        }
+
+        return await query.ToPagedResultAsync(
+            pagination.Page,
+            pagination.PageSize
+        );
     }
 
     public async Task AddAsync(T entity)
-    {
-        await _dbSet.AddAsync(entity);
-    }
+        => await _dbSet.AddAsync(entity);
 
     public void Update(T entity)
-    {
-        _dbSet.Update(entity);
-    }
+        => _dbSet.Update(entity);
 
     public void Delete(T entity)
-    {
-        _dbSet.Remove(entity);
-    }
+        => _dbSet.Remove(entity);
 }

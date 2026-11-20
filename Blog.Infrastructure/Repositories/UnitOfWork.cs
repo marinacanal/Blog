@@ -24,10 +24,8 @@ public class UnitOfWork : IUnitOfWork
         Permissions = permissions;
     }
 
-    public async Task<int> CommitAsync()
-    {
-        return await _context.SaveChangesAsync();
-    }
+    public async Task<int> CommitAsync() 
+        => await _context.SaveChangesAsync();
 
     public void Dispose()
     {

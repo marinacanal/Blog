@@ -4,6 +4,7 @@ using Blog.Application.Interfaces;
 using Blog.Application.DTOs;
 using Blog.Application.DTOs.Post;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Infrastructure.Repositories;
 
@@ -13,19 +14,25 @@ public class PostRepository : GenericRepository<Post>, IPostRepository
     {
     }
 
+    public async Task<Post?> GetByIdWithTagsAsync(Guid id)
+        => await GetFirstOrDefaultAsync(p => p.Id == id, query => query.Include(p => p.Tags));
+
     public async Task<Post?> GetBySlugAsync(string slug)
-    {
-        return await GetFirstOrDefaultAsync(p => p.Slug == slug);
-    }
+        => await GetFirstOrDefaultAsync(p => p.Slug == slug);
 
     public async Task<PagedResult<Post>> GetPostsAsync(GetPostsFilterDto filterDto)
     {
-        Expression<Func<Post, bool>> predicate = p => 
+        var includeHidden = filterDto.IncludeHidden ?? false;
+
+        Expression<Func<Post, bool>> predicate = p =>
             (!filterDto.AuthorId.HasValue || p.AuthorId == filterDto.AuthorId.Value) &&
             (filterDto.TagSlugs == null || !filterDto.TagSlugs.Any() || p.Tags.Any(t => filterDto.TagSlugs.Contains(t.Slug))) &&
-            (filterDto.IncludeHidden.HasValue || p.IsHidden == false) ;
+            (includeHidden || !p.IsHidden);
 
-        return await GetPagedAsync(filterDto, predicate);
+        return await GetPagedAsync(
+            filterDto, 
+            predicate,
+            query => query.Include(p => p.Tags));
     }
 
     public async Task UpdateVisibilityAsync(Guid id, bool hidden)

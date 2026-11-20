@@ -2,6 +2,9 @@ root = true
 
 [*.cs]
 
-# Namespace declarations should be file scoped.
+# A declaração do namespace deve ser file scoped.
 # Ex: namespace Convention;
 csharp_style_namespace_declarations = file_scoped:warning
+
+# Sugere usar expression-bodied methods quando o método puder ficar em uma única linha.
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion

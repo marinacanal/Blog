@@ -14,14 +14,13 @@ public class TagRepository : GenericRepository<Tag>, ITagRepository
     }
 
     public async Task<Tag?> GetBySlugAsync(string slug)
-    {
-        return await GetFirstOrDefaultAsync(t => t.Slug == slug);
-    }
+        => await GetFirstOrDefaultAsync(t => t.Slug == slug);
+
+    public async Task<IEnumerable<Tag>> GetTagsByIdsAsync(IReadOnlyCollection<Guid> ids)
+        => await GetAllAsync(t => ids.Contains(t.Id));
 
     public async Task<IEnumerable<Tag>> GetTagsByPostAsync(Guid postId)
-    {
-        return await GetAllAsync(t => t.Posts.Any(p => p.Id == postId));
-    }
+        => await GetAllAsync(t => t.Posts.Any(p => p.Id == postId));
 
     public async Task<PagedResult<Tag>> GetTagsAsync(GetTagsFilterDto filterDto)
     {
